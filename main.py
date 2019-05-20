@@ -72,9 +72,9 @@ def inmdif(s1, s2):
 
 b = 1.2
 a = 1
-w = 1.5
-d = 10**-6
-m = 100
+w = 2
+d = 10**-10
+m = 40
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
@@ -109,7 +109,6 @@ RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in ran
 
 
 
-
 n = 1    
       
 FM = copy.deepcopy(Start)
@@ -122,8 +121,14 @@ while (norm(mdif(SM,FM)) > d):
 print(n,norm(mdif(SM,FM)))
 print(n,norm(mdif(SM,RealSolution)))
 
+k = math.floor(2*m/3)
+z = math.floor(m/2)
+
+print(SM[k][z]-RealSolution[k][z])
 
 
+print((nextrelax(RealSolution))[k][z])
+print(RealSolution[k][z])
 
 
 
