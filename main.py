@@ -11,18 +11,28 @@ def product(s1, s2):
             prsum += h*h * s1[j][i] * s2[j][i]
     return prsum
 
+def norm(s):
+    return math.sqrt(product(s, s))
+
+def mdif(s1, s2):
+    n = copy.deepcopy(s1)
+    for j in range(m):
+        for i in range(j+1):
+            n[j][i] -= s2[j][i]
+    return n
+
+def mults(k,s):
+    n = copy.deepcopy(s)
+    for j in range(m):
+        for i in range(j+1):
+            n[j][i] = k * s[j][i]
+    return n
 
 
 
 
 
-
-
-
-
-
-
-#over-relaxation method
+# over-relaxation method
 
 def nextrelax(s):
     n = copy.deepcopy(s)
@@ -32,16 +42,54 @@ def nextrelax(s):
                 n[j][i] = 1/(2*w*(a+b)) * ( a * n[j][i-1] + b * n[j-1][i] + h*h*w*RigihtSide[j][i] + (w*b*s[j+1][i] + w*a*s[j][i+1] + (1-w)*b*s[j-1][i] + (1-w)*a*s[j][i-1] ) )
     return n
 
+# residual method
+
+def ufunc(s):
+    n = copy.deepcopy(s)
+    for j in range(1, N - 1):
+        for i in range(1, j):
+            n[j][i] = -a*(s[j-1][i]-2*s[j][i]+s[j+1][i])-b*(s[j][i-1]-2*s[j][i]+s[j][i+1])
+    return n
 
 
 
 
-a = 1
+
+
+
+
+
+
+
+
 b = 1.2
-w = 1.1
+a = 1
+w = 1.5
+d = 10**-6
 m = 5 # будет m + 1 точка
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
 RigihtSide = [[ (math.exp(i*h)*math.cos(j*h))*0.2 for i in range(j+1)]for j in range(m)]
 RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in range(m)]
+
+print(Start)
+print(RealSolution)
+print(nextrelax(RealSolution))
+
+# over-relaxation method 
+
+#n = 1    
+#      
+#FM = copy.deepcopy(Start)
+#
+#SM = nextrelax(FM)
+#
+#while (norm(mdif(SM,FM)) > d):
+##    print(n,norm(mdif(SM,FM)))
+#    n += 1
+#    SM, FM = nextrelax(SM) , SM
+#print(n,norm(mdif(SM,FM)))
+##print((mdif(SM,RealSolution)))
+#print(n,norm(mdif(SM,RealSolution)))
+
