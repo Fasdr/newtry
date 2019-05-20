@@ -33,13 +33,13 @@ def mults(k,s):
 
 
 # over-relaxation method
-
+    
 def nextrelax(s):
     n = copy.deepcopy(s)
-    for j in range(m):
-        for i in range(j + 1):
+    for j in range(1, m - 1):
+        for i in range(1, j):
             if (np.sign(i * (j - i) * (m - j - 1))) == 1 :
-                n[j][i] = (1/(2*w*(a+b))) * ( a * n[j][i-1] + b * n[j-1][i] + h*h*w*RightSide[j][i] + (w*b*s[j+1][i] + w*a*s[j][i+1] + (1-w)*b*s[j-1][i] + (1-w)*a*s[j][i-1] ) )
+                n[j][i] = (1-w)*s[j][i]+(w/(2*(a+b)))*(a*n[j-1][i]+b*n[j][i-1]+a*s[j+1][i]+b*s[j][i+1]+(h**2)*RightSide[j][i])
     return n
 
 # residual method
@@ -74,7 +74,7 @@ b = 1.2
 a = 1
 w = 1.5
 d = 10**-6
-m = 40
+m = 100
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
@@ -107,25 +107,20 @@ RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in ran
 
 # over-relaxation method 
 
-#print(Start)
-print(RealSolution[20][10])
-print((nextrelax(RealSolution))[20][10])
 
 
 
-#n = 1    
-#      
-#FM = copy.deepcopy(Start)
-#
-#SM = nextrelax(FM)
-#
-#while (norm(mdif(SM,FM)) > d):
-##    print(n,norm(mdif(SM,FM)))
-#    n += 1
-#    SM, FM = nextrelax(SM) , SM
-#print(n,norm(mdif(SM,FM)))
-##print((mdif(SM,RealSolution)))
-#print(n,norm(mdif(SM,RealSolution)))
+n = 1    
+      
+FM = copy.deepcopy(Start)
+
+SM = nextrelax(FM)
+
+while (norm(mdif(SM,FM)) > d):
+    n += 1
+    SM, FM = nextrelax(SM) , SM
+print(n,norm(mdif(SM,FM)))
+print(n,norm(mdif(SM,RealSolution)))
 
 
 
