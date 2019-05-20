@@ -74,7 +74,7 @@ b = 1.2
 a = 1
 w = 1.775
 d = 10**-6
-m = 10
+m = 5
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
@@ -86,8 +86,16 @@ RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in ran
 
 #print(RealSolution)
 #print(RightSide)
-#print((leftside(RealSolution))[20][10])
-#print(RightSide[20][10])
+#k = math.floor(2*m/3)
+#z = math.floor(m/2)
+#print((leftside(RealSolution))[k][z])
+#print(RightSide[k][z])
+
+print(norm(mdif(nextrelax(RealSolution),RealSolution)))
+
+
+
+
 
 
 
