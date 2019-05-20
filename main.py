@@ -39,7 +39,7 @@ def nextrelax(s):
     for j in range(1, m - 1):
         for i in range(1, j):
             if (np.sign(i * (j - i) * (m - j - 1))) == 1 :
-                n[j][i] = (1-w)*s[j][i]+(w/(2*(a+b)))*(a*n[j-1][i]+b*n[j][i-1]+a*s[j+1][i]+b*s[j][i+1]+(h**2)*RightSide[j][i])
+                n[j][i] = (1-w)*s[j][i]+(w/(2*(a+b)))*(b*n[j-1][i]+a*n[j][i-1]+b*s[j+1][i]+a*s[j][i+1]+(h**2)*RightSide[j][i])
     return n
 
 # residual method
@@ -72,9 +72,9 @@ def inmdif(s1, s2):
 
 b = 1.2
 a = 1
-w = 2
-d = 10**-10
-m = 40
+w = 1.775
+d = 10**-6
+m = 10
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
@@ -109,26 +109,25 @@ RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in ran
 
 
 
-n = 1    
-      
-FM = copy.deepcopy(Start)
+#n = 1    
+#      
+#FM = copy.deepcopy(Start)
+#
+#SM = nextrelax(FM)
+#
+#while (norm(mdif(SM,FM)) > d):
+#    n += 1
+#    SM, FM = nextrelax(SM) , SM
+#print(n,norm(mdif(SM,FM)))
+#print(n,norm(mdif(SM,RealSolution)))
+#print(norm(mdif(nextrelax(RealSolution),RealSolution)))
+#k = math.floor(2*m/3)
+#z = math.floor(m/2)
+#
+#print(SM[k][z]-RealSolution[k][z])
 
-SM = nextrelax(FM)
-
-while (norm(mdif(SM,FM)) > d):
-    n += 1
-    SM, FM = nextrelax(SM) , SM
-print(n,norm(mdif(SM,FM)))
-print(n,norm(mdif(SM,RealSolution)))
-
-k = math.floor(2*m/3)
-z = math.floor(m/2)
-
-print(SM[k][z]-RealSolution[k][z])
 
 
-print((nextrelax(RealSolution))[k][z])
-print(RealSolution[k][z])
 
 
 
