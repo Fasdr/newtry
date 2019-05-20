@@ -64,6 +64,17 @@ def inmdif(s1, s2):
                 n[j][i] = 0
     return n
 
+def resid(s):
+    return inmdif(leftside(s),RightSide)
+
+def tau(s):
+    return (product(leftside(s),s))/(product(leftside(s),leftside(s)))
+
+def nextresid(s):
+    g = resid(s)
+    t = tau(g)
+    return mdif(s,mults(t,g))
+
 
 
 
@@ -73,8 +84,8 @@ def inmdif(s1, s2):
 b = 1.2
 a = 1
 w = 1.775
-d = 10**-6
-m = 5
+d = 10**-10
+m = 40
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
@@ -90,24 +101,23 @@ RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in ran
 #z = math.floor(m/2)
 #print((leftside(RealSolution))[k][z])
 #print(RightSide[k][z])
-
-print(norm(mdif(nextrelax(RealSolution),RealSolution)))
-
-
+#print(resid(RealSolution))
+#print(norm(resid(RealSolution)))
 
 
 
+n = 1    
+      
+FM = copy.deepcopy(Start)
 
+SM = nextresid(FM)
 
-
-
-
-
-
-
-
-
-
+while (norm(mdif(SM,FM)) > d):
+    n += 1
+    SM, FM = nextresid(SM) , SM
+print(n,norm(mdif(SM,FM)))
+print(n,norm(mdif(SM,RealSolution)))
+print(norm(mdif(RealSolution,nextresid(RealSolution))))
 
 
 
