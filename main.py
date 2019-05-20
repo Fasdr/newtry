@@ -44,17 +44,25 @@ def nextrelax(s):
 
 # residual method
 
-def ufunc(s):
+def leftside(s):
     n = copy.deepcopy(s)
-    for j in range(1, N - 1):
-        for i in range(1, j):
-            n[j][i] = -a*(s[j-1][i]-2*s[j][i]+s[j+1][i])-b*(s[j][i-1]-2*s[j][i]+s[j][i+1])
+    for j in range(m):
+        for i in range(j+1):
+            if (np.sign(i * (j - i) * (m - j - 1))) == 1 :
+                n[j][i] = -b*(s[j-1][i]-2*s[j][i]+s[j+1][i])-a*(s[j][i-1]-2*s[j][i]+s[j][i+1])/(h*h)
+            else :
+                n[j][i] = 0                
     return n
 
-
-
-
-
+def inmdif(s1, s2):
+    n = copy.deepcopy(s1)
+    for j in range(m):
+        for i in range(j+1):
+            if (np.sign(i * (j - i) * (m - j - 1))) == 1 :
+                n[j][i] -= s2[j][i]
+            else :
+                n[j][i] = 0
+    return n
 
 
 
@@ -66,18 +74,44 @@ b = 1.2
 a = 1
 w = 1.5
 d = 10**-6
-m = 5 # будет m + 1 точка
+m = 5
 h = 1/(m-1)
 
 Start = [[ (math.exp(i*h)*math.cos(j*h))*(1-(np.sign(i * (j - i) * (m - j - 1)))) + (np.sign(i * (j - i) * (m - j - 1)))  for i in range(j+1)]for j in range(m)]
 RigihtSide = [[ (math.exp(i*h)*math.cos(j*h))*0.2 for i in range(j+1)]for j in range(m)]
 RealSolution = [[ (math.exp(i*h)*math.cos(j*h)) for i in range(j+1)]for j in range(m)]
 
-print(Start)
-print(RealSolution)
-print(nextrelax(RealSolution))
+
+# residual method
+
+
+print(leftside(RealSolution))
+print(inmdif(leftside(RealSolution),RigihtSide))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # over-relaxation method 
+
+#print(Start)
+#print(RealSolution)
+#print(nextrelax(RealSolution))
+
+
 
 #n = 1    
 #      
@@ -92,4 +126,14 @@ print(nextrelax(RealSolution))
 #print(n,norm(mdif(SM,FM)))
 ##print((mdif(SM,RealSolution)))
 #print(n,norm(mdif(SM,RealSolution)))
+
+
+
+
+
+
+
+
+
+
 
